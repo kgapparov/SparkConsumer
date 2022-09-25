@@ -1,0 +1,46 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.3'
+    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+    id 'java'
+}
+
+group = 'io.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation ('org.springframework.boot:spring-boot-starter') {
+        exclude(group:'org.slf4j', module: 'slf4j-reload4j')
+        exclude(group:'ch.qos.logback', module: 'logback-classic')
+    }
+//    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation ('org.apache.kafka:kafka-streams') {
+        exclude(group:'io.netty', module:'netty-all')
+    }
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly('org.apache.spark:spark-core_2.10:2.2.3') {
+        exclude(group:'io.netty', module:'netty-all')
+    }
+    compileOnly('org.apache.spark:spark-streaming_2.10:2.2.3') {
+        exclude(group:'io.netty', module:'netty-all')
+    }
+    implementation 'io.netty:netty-all'
+    compileOnly('org.apache.spark:spark-streaming-kafka-0-10_2.11:2.1.1')
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
